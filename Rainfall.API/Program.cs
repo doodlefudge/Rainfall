@@ -33,7 +33,10 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(filePath);
 });
 
-
+builder.Services.AddHttpClient<IRainfallApiHttpService, RainfallApiHttpService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+});
 
 var app = builder.Build();
 
