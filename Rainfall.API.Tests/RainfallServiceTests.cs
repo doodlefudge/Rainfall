@@ -1,5 +1,6 @@
 using Moq;
 using Newtonsoft.Json;
+using Rainfall.API.Common.CustomExceptions;
 using Rainfall.API.Common.HttpModels;
 using Rainfall.API.Common.Services;
 using Rainfall.API.Common.Services.Abstracts;
@@ -25,6 +26,7 @@ namespace Rainfall.API.Tests
             _rainfallService = new RainfallService(_mockRainfallService.Object);
             var response = await _rainfallService.GetRainfall("3680", 1);
             var itemsToTest = response.RainfallReadings.Select(e => e.AmountMeasured).ToList();
+            Assert.NotNull(itemsToTest);
             Assert.Contains(5.0, itemsToTest);
 
         }
@@ -33,13 +35,25 @@ namespace Rainfall.API.Tests
         [Test]
         public async Task CanReturnNoValueFromHttpService()
         {
-            _mockRainfallService = new Mock<IRainfallApiHttpService>();
-            _mockRainfallService.Setup(x => x.GetRainfall("3680", It.IsAny<int?>()));
-            _rainfallService = new RainfallService(_mockRainfallService.Object);
-            var response = await _rainfallService.GetRainfall("3680", 1);
-            var itemsToTest = response.RainfallReadings.Select(e => e.AmountMeasured).ToList();
-            Assert.IsEmpty(itemsToTest);
+            Assert.ThrowsAsync<NullValueException>(async () =>
+            {
+                _mockRainfallService = new Mock<IRainfallApiHttpService>();
+                _mockRainfallService.Setup(x => x.GetRainfall("3680", It.IsAny<int?>()));
+                _rainfallService = new RainfallService(_mockRainfallService.Object);
+                var response = await _rainfallService.GetRainfall("3680", 1);
+            });
+        }
 
+        [Test]
+        public async Task InvalidRequestFromHttpService()
+        {
+            Assert.ThrowsAsync<ArgumentException>(async () =>
+            {
+                _mockRainfallService = new Mock<IRainfallApiHttpService>();
+                _mockRainfallService.Setup(x => x.GetRainfall("3680", 1000));
+                _rainfallService = new RainfallService(_mockRainfallService.Object);
+                var response = await _rainfallService.GetRainfall("3680", 1000);
+            });
         }
 
 

@@ -1,4 +1,5 @@
-﻿using Rainfall.API.Common.HttpModels;
+﻿using Rainfall.API.Common.CustomExceptions;
+using Rainfall.API.Common.HttpModels;
 using Rainfall.API.Common.Models;
 using Rainfall.API.Common.Services.Abstracts;
 using System;
@@ -19,24 +20,36 @@ namespace Rainfall.API.Common.Services
         }
         public async Task<RainfallReadingResponse> GetRainfall(string stationId, int? count)
         {
-            var response = await _service.GetRainfall(stationId, count);
-            var rainfallReadings = new List<RainfallReading>();
-
-            if (response == null)
+            try
             {
-                throw new 
+                if (count <= 0 || count > 100)
+                    throw new ArgumentException();
+
+                var response = await _service.GetRainfall(stationId, count);
+                var rainfallReadings = new List<RainfallReading>();
+
+                if (response == null)
+                {
+                    throw new NullValueException();
+                }
+
+                var items = response.Items.ToList();
+
+                rainfallReadings.AddRange(items.Select(item => new RainfallReading()
+                {
+                    AmountMeasured = item.Value,
+                    DateMeasured = item.DateTime.ToString()
+                }));
+                return new RainfallReadingResponse
+                {
+                    RainfallReadings = rainfallReadings
+                };
+
             }
-            var items = response.Items.ToList();
-
-            rainfallReadings.AddRange(items.Select(item => new RainfallReading()
+            catch(Exception e)
             {
-                AmountMeasured = item.Value,
-                DateMeasured = item.DateTime.ToString()
-            }));
-            return new RainfallReadingResponse
-            {
-                RainfallReadings = rainfallReadings
-            };
+                throw e;
+            }
         }
     }
 }
