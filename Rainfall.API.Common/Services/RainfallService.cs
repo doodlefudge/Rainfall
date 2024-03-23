@@ -46,9 +46,9 @@ namespace Rainfall.API.Common.Services
                 };
 
             }
-            catch(Exception e)
+            catch (NullValueException)
             {
-                throw e;
+                throw;
             }
         }
     }
