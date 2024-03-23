@@ -5,10 +5,14 @@ using System.Net;
 
 namespace Rainfall.API.Controllers
 {
+    /// <summary>
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class RainfallController : ControllerBase
     {
+        /// <summary>
+        /// </summary>
         public RainfallController()
         {
 
