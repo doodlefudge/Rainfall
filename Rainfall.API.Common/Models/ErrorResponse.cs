@@ -8,7 +8,11 @@ namespace Rainfall.API.Common.Models
 {
     public class ErrorResponse
     {
+        public ErrorResponse()
+        {
+            Detail = new List<ErrorDetail>();
+        }
         public string? Message { get; set; }
-        public IEnumerable<ErrorDetail>? Detail { get; set; }
+        public List<ErrorDetail>? Detail { get; set; }
     }
 }
