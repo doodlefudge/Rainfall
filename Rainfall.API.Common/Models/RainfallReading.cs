@@ -8,7 +8,7 @@ namespace Rainfall.API.Common.Models
 {
     public class RainfallReading
     {
-        public string? DateTime { get; set; }
-        public decimal Number { get; set; }
+        public string? DateMeasured { get; set; }
+        public decimal AmountMeasured { get; set; }
     }
 }
