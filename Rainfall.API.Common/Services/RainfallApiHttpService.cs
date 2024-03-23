@@ -22,7 +22,7 @@ namespace Rainfall.API.Common.Services
 
         public async Task<RainfallHttpResponse> GetRainfall(string stationId, int? count)
         {
-            string url = $"{stationId}-rainfall-tipping_bucket_raingauge-t-15_min-mm/readings?_sorted";
+            string url = $"id/measures/{stationId}-rainfall-tipping_bucket_raingauge-t-15_min-mm/readings?_sorted";
             if(count != null)
             {
                 url += $"&_limit={count}";
