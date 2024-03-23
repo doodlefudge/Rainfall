@@ -17,7 +17,7 @@ namespace Rainfall.API.Common.Services
             _httpClient = httpClient;
         }
 
-        public Task<RainfallHttpResponse> GetRainfall(string stationId, int count = 10)
+        public async Task<RainfallHttpResponse> GetRainfall(string stationId, int? count)
         {
             throw new NotImplementedException();
         }
