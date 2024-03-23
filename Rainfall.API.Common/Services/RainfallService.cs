@@ -22,6 +22,10 @@ namespace Rainfall.API.Common.Services
             var response = await _service.GetRainfall(stationId, count);
             var rainfallReadings = new List<RainfallReading>();
 
+            if (response == null)
+            {
+                throw new 
+            }
             var items = response.Items.ToList();
 
             rainfallReadings.AddRange(items.Select(item => new RainfallReading()
